@@ -18,7 +18,7 @@ contract patientsystem {
        // this is used later when setting the msg.address to the "AccountOwner" variable
     address public accountOwner;
         // gives a specific address to patients in an array similar to a dictionary.
-    mapping(address=> Patient) public balloters;
+    mapping(address=> Patient) public patients;
        // this function makes sure that the person who calls the function has the same address as the account that called the function..
      modifier accountOwnerOnly() {
         require(msg.sender == accountOwner);
