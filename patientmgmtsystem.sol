@@ -1,21 +1,46 @@
-pragma solidity >= 0.4.0 <  0.6.0;
-// smart contract which will create a patient data management system
-contract patientsystem {
-    struct Doctor {
-        // authorized means that they are authorized to access patient's data.
-        bool authorized;
-    }
-    // struct "Patient" can be declared as a variable.
-    struct Patient{
-        // keep track of the patients biometric information.
-        string name;
-        uint weight;
-        uint age;
-        uint height;
-    }
-    // Patient array to hold the patient's information
-    Patient[] public patients;
-       
+pragma solidity ^0.4.19;
  
-
+/** @title PatientRecord */
+contract PatientRecord {
+    
+    // ** Part 1 ** Enums **    
+    enum Gender { Male, Female }    
+    
+    // ** Part 2 ** Structs **    
+    struct Patient {
+         bytes32 name; 
+         uint age;
+        Gender gender;
+    }
+         
+    // ** Part 3 ** State Variables **    
+    uint id; //Id for the patient record
+    Patient private patient; // The patient we are referring to
+    address public recordOwner; //The address of the owner    
+    // ** Part 4 ** Events **    
+    
+    event PatientNameAccessed(address sender);
+    
+    // ** Part 5 ** Modifiers **    
+    // Like a protocol that a function should follow
+    modifier onlyOwner() {
+        require(msg.sender == recordOwner);
+        _;
+    }
+    
+    // ** Part 6 ** Functions **    
+    function PatientRecord() public {
+        recordOwner = msg.sender;
+    }
+    
+    function getPatientName() public returns (bytes32) {
+        PatientNameAccessed(msg.sender);// Triggering the event
+        return patient.name;
+    }
+      
+    // Note that the function has the onlyOwner Modifier
+    function setPatientName(bytes32 name) public onlyOwner {
+        patient.name = name;
+    }
+        
 }
